@@ -28,8 +28,7 @@ function setupEventListeners() {
     chatInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') sendMessage();
     });
-    
-    
+
     // New Chat button
     document.getElementById('newChatBtn').addEventListener('click', async () => {
         if (currentSessionId) {
@@ -47,7 +46,6 @@ function setupEventListeners() {
         });
     });
 }
-
 
 // Chat Functions
 async function sendMessage() {
