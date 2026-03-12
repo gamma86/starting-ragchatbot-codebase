@@ -5,23 +5,179 @@
     padding: 0;
 }
 
-/* CSS Variables */
+/* CSS Variables — Dark theme (default) */
 :root {
+    /* Brand */
     --primary-color: #2563eb;
     --primary-hover: #1d4ed8;
+    --primary-shadow: rgba(37, 99, 235, 0.3);
+
+    /* Backgrounds */
     --background: #0f172a;
     --surface: #1e293b;
     --surface-hover: #334155;
+
+    /* Text */
     --text-primary: #f1f5f9;
     --text-secondary: #94a3b8;
+
+    /* Borders & shadows */
     --border-color: #334155;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    --focus-ring: rgba(37, 99, 235, 0.35);
+
+    /* Messages */
     --user-message: #2563eb;
     --assistant-message: #374151;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-    --radius: 12px;
-    --focus-ring: rgba(37, 99, 235, 0.2);
+
+    /* Code blocks */
+    --code-bg: rgba(0, 0, 0, 0.25);
+    --code-border: rgba(255, 255, 255, 0.06);
+
+    /* Welcome card */
     --welcome-bg: #1e3a5f;
     --welcome-border: #2563eb;
+    --welcome-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+
+    /* Status — error */
+    --error-text: #f87171;
+    --error-bg: rgba(239, 68, 68, 0.12);
+    --error-border: rgba(239, 68, 68, 0.25);
+
+    /* Status — success */
+    --success-text: #4ade80;
+    --success-bg: rgba(34, 197, 94, 0.12);
+    --success-border: rgba(34, 197, 94, 0.25);
+
+    /* Theme toggle */
+    --toggle-bg: #334155;
+    --toggle-icon-color: #f1f5f9;
+
+    /* Misc */
+    --radius: 12px;
+}
+
+/* ─── Light theme ─────────────────────────────────────────────────────────── */
+body.light-mode {
+    /* Backgrounds */
+    --background: #f8fafc;       /* slate-50  */
+    --surface: #ffffff;           /* pure white */
+    --surface-hover: #f1f5f9;    /* slate-100 */
+
+    /* Text — both pass WCAG AA on their backgrounds */
+    --text-primary: #0f172a;     /* slate-900  — 16.75:1 on white */
+    --text-secondary: #475569;   /* slate-600  — 5.74:1 on white  */
+
+    /* Borders & shadows */
+    --border-color: #cbd5e1;     /* slate-300 */
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+    --focus-ring: rgba(37, 99, 235, 0.25);
+
+    /* Messages */
+    --user-message: #2563eb;     /* unchanged — white text on blue */
+    --assistant-message: #f1f5f9;
+
+    /* Code blocks */
+    --code-bg: rgba(0, 0, 0, 0.05);
+    --code-border: rgba(0, 0, 0, 0.08);
+
+    /* Welcome card */
+    --welcome-bg: #eff6ff;       /* blue-50  */
+    --welcome-border: #bfdbfe;   /* blue-200 */
+    --welcome-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+
+    /* Status — error (contrast-safe on light bg) */
+    --error-text: #b91c1c;       /* red-700  — 5.78:1 on white */
+    --error-bg: #fef2f2;         /* red-50   */
+    --error-border: #fecaca;     /* red-200  */
+
+    /* Status — success (contrast-safe on light bg) */
+    --success-text: #15803d;     /* green-700 — 5.32:1 on white */
+    --success-bg: #f0fdf4;       /* green-50  */
+    --success-border: #bbf7d0;   /* green-200 */
+
+    /* Theme toggle */
+    --toggle-bg: #e2e8f0;        /* slate-200 */
+    --toggle-icon-color: #1e293b;
+}
+
+/* Smooth theme transition */
+body,
+body *,
+body *::before,
+body *::after {
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1000;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background: var(--toggle-bg);
+    color: var(--toggle-icon-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition:
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        color 0.3s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.theme-toggle:hover {
+    background: var(--surface-hover);
+    transform: scale(1.1);
+    box-shadow: var(--shadow);
+}
+
+.theme-toggle:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.theme-toggle:active {
+    transform: scale(0.95);
+}
+
+/* Icon visibility logic */
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon {
+    position: absolute;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Dark mode: show sun (to switch to light) */
+.theme-toggle .icon-sun {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+.theme-toggle .icon-moon {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.5);
+}
+
+/* Light mode: show moon (to switch to dark) */
+body.light-mode .theme-toggle .icon-sun {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5);
+}
+body.light-mode .theme-toggle .icon-moon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
 }
 
 /* Base Styles */
@@ -325,7 +481,8 @@ header h1 {
 }
 
 .message-content code {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: var(--code-bg);
+    border: 1px solid var(--code-border);
     padding: 0.125rem 0.25rem;
     border-radius: 3px;
     font-family: 'Fira Code', 'Consolas', monospace;
@@ -333,7 +490,8 @@ header h1 {
 }
 
 .message-content pre {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: var(--code-bg);
+    border: 1px solid var(--code-border);
     padding: 0.75rem;
     border-radius: 4px;
     overflow-x: auto;
@@ -354,9 +512,9 @@ header h1 {
 
 /* Welcome message special styling */
 .message.welcome-message .message-content {
-    background: var(--surface);
-    border: 2px solid var(--border-color);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    background: var(--welcome-bg);
+    border: 2px solid var(--welcome-border);
+    box-shadow: var(--welcome-shadow);
     position: relative;
 }
 
@@ -429,7 +587,7 @@ header h1 {
 #sendButton:hover:not(:disabled) {
     background: var(--primary-hover);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 4px 12px var(--primary-shadow);
 }
 
 #sendButton:active:not(:disabled) {
@@ -475,21 +633,21 @@ header h1 {
 
 /* Error Message */
 .error-message {
-    background: rgba(239, 68, 68, 0.1);
-    color: #f87171;
+    background: var(--error-bg);
+    color: var(--error-text);
     padding: 0.75rem 1.25rem;
     border-radius: 8px;
-    border: 1px solid rgba(239, 68, 68, 0.2);
+    border: 1px solid var(--error-border);
     margin: 0.5rem 0;
 }
 
 /* Success Message */
 .success-message {
-    background: rgba(34, 197, 94, 0.1);
-    color: #4ade80;
+    background: var(--success-bg);
+    color: var(--success-text);
     padding: 0.75rem 1.25rem;
     border-radius: 8px;
-    border: 1px solid rgba(34, 197, 94, 0.2);
+    border: 1px solid var(--success-border);
     margin: 0.5rem 0;
 }
 
