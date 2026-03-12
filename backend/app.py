@@ -57,6 +57,7 @@ class CourseStats(BaseModel):
 async def query_documents(request: QueryRequest):
     """Process a query and return response with sources"""
     try:
+        import traceback as _tb
         # Create session if not provided
         session_id = request.session_id
         if not session_id:
@@ -71,7 +72,14 @@ async def query_documents(request: QueryRequest):
             session_id=session_id
         )
     except Exception as e:
+        _tb.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.delete("/api/session/{session_id}")
+async def delete_session(session_id: str):
+    """Clear a session's conversation history"""
+    rag_system.session_manager.clear_session(session_id)
+    return {"status": "cleared"}
 
 @app.get("/api/courses", response_model=CourseStats)
 async def get_course_stats():
